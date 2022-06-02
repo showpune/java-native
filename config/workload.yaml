@@ -1,0 +1,18 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: workload-java-native
+  namespace: business-development
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    app.kubernetes.io/part-of: workload-java-native
+spec:
+  build:
+    env:
+      - name: BP_NATIVE_IMAGE
+        value: "true"
+  source:
+    git:
+      url: https://github.com/showpune/java-native.git
+      ref:
+        branch: master
