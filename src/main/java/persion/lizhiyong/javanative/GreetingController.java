@@ -15,6 +15,6 @@ public class GreetingController {
 
 	@GetMapping("/")
 	String hello() {
-		return "Hello " + target + "!";
+		return "Hello Update" + target + "!";
 	}
 }
