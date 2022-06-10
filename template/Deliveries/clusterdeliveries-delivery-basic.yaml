@@ -1,0 +1,48 @@
+apiVersion: carto.run/v1alpha1
+kind: ClusterDelivery
+metadata:
+  annotations:
+    kapp.k14s.io/identity: v1;/carto.run/ClusterDelivery/delivery-basic;carto.run/v1alpha1
+    kapp.k14s.io/original: '{"apiVersion":"carto.run/v1alpha1","kind":"ClusterDelivery","metadata":{"labels":{"kapp.k14s.io/app":"1647776994519998631","kapp.k14s.io/association":"v1.4366874b0796d3d98c4fb91b241ff72f"},"name":"delivery-basic"},"spec":{"resources":[{"name":"source-provider","params":[{"name":"serviceAccount","value":"default"}],"templateRef":{"kind":"ClusterSourceTemplate","name":"delivery-source-template"}},{"deployment":{"resource":"source-provider"},"name":"deployer","params":[{"name":"serviceAccount","value":"default"}],"templateRef":{"kind":"ClusterDeploymentTemplate","name":"app-deploy"}}],"selector":{"app.tanzu.vmware.com/deliverable-type":"web"}}}'
+    kapp.k14s.io/original-diff-md5: c6e94dc94aed3401b5d0f26ed6c0bff3
+  creationTimestamp: "2022-03-20T11:49:55Z"
+  generation: 1
+  labels:
+    kapp.k14s.io/app: "1647776994519998631"
+    kapp.k14s.io/association: v1.4366874b0796d3d98c4fb91b241ff72f
+  name: delivery-basic
+  resourceVersion: "11292"
+  uid: 17125e8c-2c0a-40aa-9be4-6cb9a083b667
+spec:
+  resources:
+  - name: source-provider
+    params:
+    - name: serviceAccount
+      value: default
+    templateRef:
+      kind: ClusterSourceTemplate
+      name: delivery-source-template
+  - deployment:
+      resource: source-provider
+    name: deployer
+    params:
+    - name: serviceAccount
+      value: default
+    templateRef:
+      kind: ClusterDeploymentTemplate
+      name: app-deploy
+  selector:
+    app.tanzu.vmware.com/deliverable-type: web
+status:
+  conditions:
+  - lastTransitionTime: "2022-03-20T11:49:55Z"
+    message: ""
+    reason: Ready
+    status: "True"
+    type: TemplatesReady
+  - lastTransitionTime: "2022-03-20T11:49:55Z"
+    message: ""
+    reason: Ready
+    status: "True"
+    type: Ready
+  observedGeneration: 1

@@ -1,0 +1,83 @@
+apiVersion: carto.run/v1alpha1
+kind: ClusterSourceTemplate
+metadata:
+  annotations:
+    kapp.k14s.io/identity: v1;/carto.run/ClusterSourceTemplate/source-template;carto.run/v1alpha1
+    kapp.k14s.io/original: '{"apiVersion":"carto.run/v1alpha1","kind":"ClusterSourceTemplate","metadata":{"labels":{"kapp.k14s.io/app":"1647776984819028740","kapp.k14s.io/association":"v1.3f8a98253cdf47d64c37f27a382e5698"},"name":"source-template"},"spec":{"params":[{"default":"default","name":"serviceAccount"}],"revisionPath":".status.artifact.revision","urlPath":".status.artifact.url","ytt":"#@
+      load(\"@ytt:data\", \"data\")\n\n#@ def param(key):\n#@   if not key in data.values.params:\n#@     return
+      None\n#@   end\n#@   return data.values.params[key]\n#@ end\n\n---\n#@ if hasattr(data.values.workload.spec.source,
+      \"git\"):\napiVersion: source.toolkit.fluxcd.io/v1beta1\nkind: GitRepository\nmetadata:\n  name:
+      #@ data.values.workload.metadata.name\n  labels:\n    app.kubernetes.io/component:
+      source\n    #@ if/end hasattr(data.values.workload.metadata, \"labels\") and
+      hasattr(data.values.workload.metadata.labels, \"app.kubernetes.io/part-of\"):\n    app.kubernetes.io/part-of:
+      #@ data.values.workload.metadata.labels[\"app.kubernetes.io/part-of\"]\nspec:\n  interval:
+      1m0s\n  url: #@ data.values.workload.spec.source.git.url\n  ref: #@ data.values.workload.spec.source.git.ref\n  ignore:
+      |\n    !.git\n  #@ if/end param(\"gitops_ssh_secret\"):\n  secretRef:\n    name:
+      #@ param(\"gitops_ssh_secret\")\n#@ end\n\n#@ if hasattr(data.values.workload.spec.source,
+      \"image\"):\napiVersion: source.apps.tanzu.vmware.com/v1alpha1\nkind: ImageRepository\nmetadata:\n  name:
+      #@ data.values.workload.metadata.name\n  labels:\n    app.kubernetes.io/component:
+      source\n    #@ if/end hasattr(data.values.workload.metadata, \"labels\") and
+      hasattr(data.values.workload.metadata.labels, \"app.kubernetes.io/part-of\"):\n    app.kubernetes.io/part-of:
+      #@ data.values.workload.metadata.labels[\"app.kubernetes.io/part-of\"]\nspec:\n  serviceAccount:
+      #@ data.values.params.serviceAccount\n  interval: 1m0s\n  image: #@ data.values.workload.spec.source.image\n#@
+      end\n"}}'
+    kapp.k14s.io/original-diff-md5: c6e94dc94aed3401b5d0f26ed6c0bff3
+  creationTimestamp: "2022-03-20T11:49:45Z"
+  generation: 1
+  labels:
+    kapp.k14s.io/app: "1647776984819028740"
+    kapp.k14s.io/association: v1.3f8a98253cdf47d64c37f27a382e5698
+  name: source-template
+  resourceVersion: "10712"
+  uid: 59adfe23-0bbe-4633-a960-92d98aeeb44e
+spec:
+  params:
+  - default: default
+    name: serviceAccount
+  revisionPath: .status.artifact.revision
+  urlPath: .status.artifact.url
+  ytt: |
+    #@ load("@ytt:data", "data")
+
+    #@ def param(key):
+    #@   if not key in data.values.params:
+    #@     return None
+    #@   end
+    #@   return data.values.params[key]
+    #@ end
+
+    ---
+    #@ if hasattr(data.values.workload.spec.source, "git"):
+    apiVersion: source.toolkit.fluxcd.io/v1beta1
+    kind: GitRepository
+    metadata:
+      name: #@ data.values.workload.metadata.name
+      labels:
+        app.kubernetes.io/component: source
+        #@ if/end hasattr(data.values.workload.metadata, "labels") and hasattr(data.values.workload.metadata.labels, "app.kubernetes.io/part-of"):
+        app.kubernetes.io/part-of: #@ data.values.workload.metadata.labels["app.kubernetes.io/part-of"]
+    spec:
+      interval: 1m0s
+      url: #@ data.values.workload.spec.source.git.url
+      ref: #@ data.values.workload.spec.source.git.ref
+      ignore: |
+        !.git
+      #@ if/end param("gitops_ssh_secret"):
+      secretRef:
+        name: #@ param("gitops_ssh_secret")
+    #@ end
+
+    #@ if hasattr(data.values.workload.spec.source, "image"):
+    apiVersion: source.apps.tanzu.vmware.com/v1alpha1
+    kind: ImageRepository
+    metadata:
+      name: #@ data.values.workload.metadata.name
+      labels:
+        app.kubernetes.io/component: source
+        #@ if/end hasattr(data.values.workload.metadata, "labels") and hasattr(data.values.workload.metadata.labels, "app.kubernetes.io/part-of"):
+        app.kubernetes.io/part-of: #@ data.values.workload.metadata.labels["app.kubernetes.io/part-of"]
+    spec:
+      serviceAccount: #@ data.values.params.serviceAccount
+      interval: 1m0s
+      image: #@ data.values.workload.spec.source.image
+    #@ end

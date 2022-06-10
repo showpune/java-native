@@ -1,0 +1,49 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: workload-java-native-traffic-split
+  labels:
+    app.kubernetes.io/part-of: workload-java-native
+    apps.tanzu.vmware.com/workload-type: web-traffic-split
+    app.kubernetes.io/component: run
+    carto.run/workload-name: workload-java-native-traffic-split
+spec:
+  template:
+    metadata:
+      annotations:
+        boot.spring.io/version: 2.7.0
+        conventions.apps.tanzu.vmware.com/applied-conventions: |-
+          appliveview-sample/app-live-view-connector
+          appliveview-sample/app-live-view-appflavours
+          appliveview-sample/app-live-view-systemproperties
+          spring-boot-convention/spring-boot
+          spring-boot-convention/spring-boot-graceful-shutdown
+          spring-boot-convention/spring-boot-web
+        developer.conventions/target-containers: workload
+      labels:
+        app.kubernetes.io/component: run
+        app.kubernetes.io/part-of: workload-java-native
+        apps.tanzu.vmware.com/workload-type: web-traffic-split
+        carto.run/workload-name: workload-java-native-traffic-split
+        conventions.apps.tanzu.vmware.com/framework: spring-boot
+        tanzu.app.live.view: "true"
+        tanzu.app.live.view.application.flavours: spring-boot
+        tanzu.app.live.view.application.name: java-native
+    spec:
+      containers:
+      - env:
+        - name: JAVA_TOOL_OPTIONS
+          value: -Dmanagement.endpoint.health.show-details="always" -Dmanagement.endpoints.web.exposure.include="*" -Dserver.port="8080" -Dserver.shutdown.grace-period="24s"
+        image: index.docker.io/showpune/workload-java-native-traffic-split-business-development@sha256:93686b459aa4527185f5875eeffadf286057f471fe6c547035d751776e0f81e9
+        name: workload
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        securityContext:
+          runAsUser: 1000
+      serviceAccountName: default
+traffic:
+- latestRevision: true
+  percent: 50
+

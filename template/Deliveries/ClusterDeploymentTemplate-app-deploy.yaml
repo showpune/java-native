@@ -1,0 +1,73 @@
+apiVersion: carto.run/v1alpha1
+kind: ClusterDeploymentTemplate
+metadata:
+  annotations:
+    kapp.k14s.io/identity: v1;/carto.run/ClusterDeploymentTemplate/app-deploy;carto.run/v1alpha1
+    kapp.k14s.io/original: '{"apiVersion":"carto.run/v1alpha1","kind":"ClusterDeploymentTemplate","metadata":{"labels":{"kapp.k14s.io/app":"1647776984819028740","kapp.k14s.io/association":"v1.571f69d14a456e34727f70ecb0bcfb09"},"name":"app-deploy"},"spec":{"observedCompletion":{"failed":{"key":".status.conditions[?(@.type==\"ReconcileSucceeded\")].status","value":"False"},"succeeded":{"key":".status.conditions[?(@.type==\"ReconcileSucceeded\")].status","value":"True"}},"params":[{"default":"default","name":"serviceAccount"}],"ytt":"#@
+      load(\"@ytt:data\", \"data\")\n\napiVersion: kappctrl.k14s.io/v1alpha1\nkind:
+      App\nmetadata:\n  name: #@ data.values.deliverable.metadata.name\nspec:\n  syncPeriod:
+      10m\n  serviceAccountName: #@ data.values.params.serviceAccount\n  fetch:\n    -
+      http:\n        url: #@ data.values.deployment.url\n    - inline:\n        paths:\n          config.yml:
+      |\n            ---\n            apiVersion: kapp.k14s.io/v1alpha1\n            kind:
+      Config\n            rebaseRules:\n              - path: [metadata, annotations,
+      serving.knative.dev/creator]\n                type: copy\n                sources:
+      [new, existing]\n                resourceMatchers: \u0026matchers\n                  -
+      apiVersionKindMatcher: {apiVersion: serving.knative.dev/v1, kind: Service}\n              -
+      path: [metadata, annotations, serving.knative.dev/lastModifier]\n                type:
+      copy\n                sources: [new, existing]\n                resourceMatchers:
+      *matchers\n  template:\n    - ytt: {}\n    - kbld: {}\n  deploy:\n    - kapp:
+      {}\n"}}'
+    kapp.k14s.io/original-diff-md5: c6e94dc94aed3401b5d0f26ed6c0bff3
+  creationTimestamp: "2022-03-20T11:49:45Z"
+  generation: 1
+  labels:
+    kapp.k14s.io/app: "1647776984819028740"
+    kapp.k14s.io/association: v1.571f69d14a456e34727f70ecb0bcfb09
+  name: app-deploy
+  resourceVersion: "10710"
+  uid: a61f6ad3-a640-46b5-a130-46f2b5e7da41
+spec:
+  observedCompletion:
+    failed:
+      key: .status.conditions[?(@.type=="ReconcileSucceeded")].status
+      value: "False"
+    succeeded:
+      key: .status.conditions[?(@.type=="ReconcileSucceeded")].status
+      value: "True"
+  params:
+  - default: default
+    name: serviceAccount
+  ytt: |
+    #@ load("@ytt:data", "data")
+
+    apiVersion: kappctrl.k14s.io/v1alpha1
+    kind: App
+    metadata:
+      name: #@ data.values.deliverable.metadata.name
+    spec:
+      syncPeriod: 10m
+      serviceAccountName: #@ data.values.params.serviceAccount
+      fetch:
+        - http:
+            url: #@ data.values.deployment.url
+        - inline:
+            paths:
+              config.yml: |
+                ---
+                apiVersion: kapp.k14s.io/v1alpha1
+                kind: Config
+                rebaseRules:
+                  - path: [metadata, annotations, serving.knative.dev/creator]
+                    type: copy
+                    sources: [new, existing]
+                    resourceMatchers: &matchers
+                      - apiVersionKindMatcher: {apiVersion: serving.knative.dev/v1, kind: Service}
+                  - path: [metadata, annotations, serving.knative.dev/lastModifier]
+                    type: copy
+                    sources: [new, existing]
+                    resourceMatchers: *matchers
+      template:
+        - ytt: {}
+        - kbld: {}
+      deploy:
+        - kapp: {}

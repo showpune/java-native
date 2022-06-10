@@ -11,6 +11,8 @@ spec:
     env:
       - name: BP_NATIVE_IMAGE
         value: "true"
+      - name: BPL_JFR_ENABLED
+        value: "true"
   source:
     git:
       url: https://github.com/showpune/java-native.git

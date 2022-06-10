@@ -1,0 +1,14 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: workload-java-native-traffic-split-non-native
+  namespace: business-development
+  labels:
+    apps.tanzu.vmware.com/workload-type: web-traffic-split
+    app.kubernetes.io/part-of: workload-java-native
+spec:
+  source:
+    git:
+      url: https://github.com/showpune/java-native.git
+      ref:
+        branch: master

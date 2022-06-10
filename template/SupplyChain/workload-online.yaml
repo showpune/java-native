@@ -1,0 +1,46 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"carto.run/v1alpha1","kind":"Workload","metadata":{"annotations":{},"labels":{"app.kubernetes.io/part-of":"workload-java-native","apps.tanzu.vmware.com/workload-type":"web"},"name":"workload-java-native","namespace":"business-development"},"spec":{"build":{"env":[{"name":"BP_NATIVE_IMAGE","value":"true"}]},"source":{"git":{"ref":{"branch":"master"},"url":"https://github.com/showpune/java-native.git"}}}}
+  creationTimestamp: "2022-06-02T14:53:03Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/part-of: workload-java-native
+    apps.tanzu.vmware.com/workload-type: web
+  name: workload-java-native
+  namespace: business-development
+  resourceVersion: "412417219"
+  uid: 9460e13c-1963-4870-9378-56d93cf65930
+spec:
+  build:
+    env:
+    - name: BP_NATIVE_IMAGE
+      value: "true"
+  source:
+    git:
+      ref:
+        branch: master
+      url: https://github.com/showpune/java-native.git
+status:
+  conditions:
+  - lastTransitionTime: "2022-06-02T14:53:03Z"
+    message: ""
+    reason: Ready
+    status: "True"
+    type: SupplyChainReady
+  - lastTransitionTime: "2022-06-08T22:21:04Z"
+    message: ""
+    reason: ResourceSubmissionComplete
+    status: "True"
+    type: ResourcesSubmitted
+  - lastTransitionTime: "2022-06-08T22:21:04Z"
+    message: ""
+    reason: Ready
+    status: "True"
+    type: Ready
+  observedGeneration: 1
+  supplyChainRef:
+    kind: ClusterSupplyChain
+    name: source-to-url

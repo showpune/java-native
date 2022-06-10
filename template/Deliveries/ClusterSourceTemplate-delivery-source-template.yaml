@@ -1,0 +1,82 @@
+apiVersion: carto.run/v1alpha1
+kind: ClusterSourceTemplate
+metadata:
+  annotations:
+    kapp.k14s.io/identity: v1;/carto.run/ClusterSourceTemplate/delivery-source-template;carto.run/v1alpha1
+    kapp.k14s.io/original: '{"apiVersion":"carto.run/v1alpha1","kind":"ClusterSourceTemplate","metadata":{"labels":{"kapp.k14s.io/app":"1647776984819028740","kapp.k14s.io/association":"v1.ece0276e27101acde55d54724b00c494"},"name":"delivery-source-template"},"spec":{"params":[{"default":"default","name":"serviceAccount"}],"revisionPath":".status.artifact.revision","urlPath":".status.artifact.url","ytt":"#@
+      load(\"@ytt:data\", \"data\")\n\n#@ def param(key):\n#@   if not key in data.values.params:\n#@     return
+      None\n#@   end\n#@   return data.values.params[key]\n#@ end\n\n#@ if hasattr(data.values.deliverable.spec.source,
+      \"git\"):\napiVersion: source.toolkit.fluxcd.io/v1beta1\nkind: GitRepository\nmetadata:\n  name:
+      #@ data.values.deliverable.metadata.name + \"-delivery\"\n  labels:\n    app.kubernetes.io/component:
+      source\n    #@ if/end hasattr(data.values.deliverable.metadata, \"labels\")
+      and hasattr(data.values.deliverable.metadata.labels, \"app.kubernetes.io/part-of\"):\n    app.kubernetes.io/part-of:
+      #@ data.values.deliverable.metadata.labels[\"app.kubernetes.io/part-of\"]\nspec:\n  interval:
+      1m0s\n  url: #@ data.values.deliverable.spec.source.git.url\n  ref: #@ data.values.deliverable.spec.source.git.ref\n  gitImplementation:
+      go-git\n  ignore: |\n    !.git\n  secretRef:\n    name: #@ param(\"gitops_ssh_secret\")\n#@
+      end\n\n#@ if hasattr(data.values.deliverable.spec.source, \"image\"):\napiVersion:
+      source.apps.tanzu.vmware.com/v1alpha1\nkind: ImageRepository\nmetadata:\n  name:
+      #@ data.values.deliverable.metadata.name + \"-delivery\"\n  labels:\n    app.kubernetes.io/component:
+      source\n    #@ if/end hasattr(data.values.deliverable.metadata, \"labels\")
+      and hasattr(data.values.deliverable.metadata.labels, \"app.kubernetes.io/part-of\"):\n    app.kubernetes.io/part-of:
+      #@ data.values.deliverable.metadata.labels[\"app.kubernetes.io/part-of\"]\nspec:\n  serviceAccount:
+      #@ data.values.params.serviceAccount\n  interval: 1m0s\n  image: #@ data.values.deliverable.spec.source.image\n#@
+      end\n"}}'
+    kapp.k14s.io/original-diff-md5: c6e94dc94aed3401b5d0f26ed6c0bff3
+  creationTimestamp: "2022-03-20T11:49:45Z"
+  generation: 1
+  labels:
+    kapp.k14s.io/app: "1647776984819028740"
+    kapp.k14s.io/association: v1.ece0276e27101acde55d54724b00c494
+  name: delivery-source-template
+  resourceVersion: "10698"
+  uid: 427936d0-8438-428d-bba6-059c86143d61
+spec:
+  params:
+  - default: default
+    name: serviceAccount
+  revisionPath: .status.artifact.revision
+  urlPath: .status.artifact.url
+  ytt: |
+    #@ load("@ytt:data", "data")
+
+    #@ def param(key):
+    #@   if not key in data.values.params:
+    #@     return None
+    #@   end
+    #@   return data.values.params[key]
+    #@ end
+
+    #@ if hasattr(data.values.deliverable.spec.source, "git"):
+    apiVersion: source.toolkit.fluxcd.io/v1beta1
+    kind: GitRepository
+    metadata:
+      name: #@ data.values.deliverable.metadata.name + "-delivery"
+      labels:
+        app.kubernetes.io/component: source
+        #@ if/end hasattr(data.values.deliverable.metadata, "labels") and hasattr(data.values.deliverable.metadata.labels, "app.kubernetes.io/part-of"):
+        app.kubernetes.io/part-of: #@ data.values.deliverable.metadata.labels["app.kubernetes.io/part-of"]
+    spec:
+      interval: 1m0s
+      url: #@ data.values.deliverable.spec.source.git.url
+      ref: #@ data.values.deliverable.spec.source.git.ref
+      gitImplementation: go-git
+      ignore: |
+        !.git
+      secretRef:
+        name: #@ param("gitops_ssh_secret")
+    #@ end
+
+    #@ if hasattr(data.values.deliverable.spec.source, "image"):
+    apiVersion: source.apps.tanzu.vmware.com/v1alpha1
+    kind: ImageRepository
+    metadata:
+      name: #@ data.values.deliverable.metadata.name + "-delivery"
+      labels:
+        app.kubernetes.io/component: source
+        #@ if/end hasattr(data.values.deliverable.metadata, "labels") and hasattr(data.values.deliverable.metadata.labels, "app.kubernetes.io/part-of"):
+        app.kubernetes.io/part-of: #@ data.values.deliverable.metadata.labels["app.kubernetes.io/part-of"]
+    spec:
+      serviceAccount: #@ data.values.params.serviceAccount
+      interval: 1m0s
+      image: #@ data.values.deliverable.spec.source.image
+    #@ end
