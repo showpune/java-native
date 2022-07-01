@@ -37,7 +37,7 @@
 
     <build>
         <plugins>
-            <!--
+           <!--
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -49,12 +49,14 @@
                             <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
                         </env>
                         <buildpacks>
-                            <buildpack>gcr.io/paketo-buildpacks/java-native-image:7.19.0</buildpack>
+                            <buildpack>gcr.io/paketo-buildpacks/java-native-image:latest</buildpack>
                         </buildpacks>
                     </image>
                 </configuration>
             
             </plugin>
+        -->
+        
             <plugin>
                 <groupId>org.springframework.experimental</groupId>
                 <artifactId>spring-aot-maven-plugin</artifactId>
@@ -68,7 +70,7 @@
                     </execution>
                 </executions>
             </plugin>
-        -->
+        
         </plugins>
     </build>
 
