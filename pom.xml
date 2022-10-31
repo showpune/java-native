@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.4</version>
+        <version>3.0.0-RC1</version>
         <relativePath/>
     </parent>
     <groupId>persion.lizhiyong</groupId>
@@ -14,13 +14,13 @@
     <name>java-native</name>
     <description>Java Native project for Spring Boot</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -31,58 +31,79 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.experimental</groupId>
-            <artifactId>spring-native</artifactId>
-            <version>0.12.1</version>
-        </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>pre-native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>process-aot</id>
+                                <goals>
+                                    <goal>process-aot</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <plugins>
-        
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                   <!--
+                <executions>
+                    <execution>
+                        <!-- Spring Boot Actuator displays build-related information
+                          if a META-INF/build-info.properties file is present -->
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                        <configuration>
+                            <additionalProperties>
+                                <encoding.source>${project.build.sourceEncoding}</encoding.source>
+                                <encoding.reporting>${project.reporting.outputEncoding}</encoding.reporting>
+                                <java.source>${maven.compiler.source}</java.source>
+                                <java.target>${maven.compiler.target}</java.target>
+                                <spring.boot.version>${project.parent.version}</spring.boot.version>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
                     <image>
+                        <buildpacks>
+                            <buildpack>gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea</buildpack>
+                            <buildpack>gcr.io/paketo-buildpacks/java-native-image</buildpack>
+                        </buildpacks>
                         <builder>paketobuildpacks/builder:tiny</builder>
                         <env>
                             <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+                            <BP_JVM_VERSION>17</BP_JVM_VERSION>
                         </env>
-                        <buildpacks>
-                            <buildpack>gcr.io/paketo-buildpacks/java-native-image:latest</buildpack>
-                        </buildpacks>
+                        <name>showpune/java-native:${project.version}</name>
                     </image>
                 </configuration>
-             -->
             </plugin>
-       
-        
-            <plugin>
-                <groupId>org.springframework.experimental</groupId>
-                <artifactId>spring-aot-maven-plugin</artifactId>
-                <version>0.12.1</version>
-                <executions>
-                    <execution>
-                        <id>generate</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        
         </plugins>
     </build>
-
     <repositories>
         <repository>
             <id>spring-release</id>
             <name>Spring release</name>
             <url>https://repo.spring.io/release</url>
+        </repository>
+        <repository>
+            <id>spring-milestone</id>
+            <name>Spring milestone</name>
+            <url>https://repo.spring.io/milestone</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -91,6 +112,11 @@
             <id>spring-release</id>
             <name>Spring release</name>
             <url>https://repo.spring.io/release</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-milestone</id>
+            <name>Spring milestone</name>
+            <url>https://repo.spring.io/milestone</url>
         </pluginRepository>
     </pluginRepositories>
 </project>

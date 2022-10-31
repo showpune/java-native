@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  simple-native:
+    image: showpune/java-native:0.0.1-SNAPSHOT
+    container_name: java-native
+    mem_limit: 512M
+    ports:
+     - 8080:8080
+
