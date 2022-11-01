@@ -12,15 +12,17 @@
     <artifactId>java-native</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>java-native</name>
+
     <description>Java Native project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
+        <spring-native.version>0.12.1</spring-native.version>
     </properties>
     <dependencies>
         <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -35,46 +37,75 @@
         <dependency>
             <groupId>org.springframework.experimental</groupId>
             <artifactId>spring-native</artifactId>
-            <version>0.12.1</version>
+            <version>${spring-native.version}</version>
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>pre-native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.experimental</groupId>
+                        <artifactId>spring-aot-maven-plugin</artifactId>
+                        <version>${spring-native.version}</version>
+                        <executions>
+                            <execution>
+                                <id>test-generate</id>
+                                <goals>
+                                    <goal>test-generate</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>generate</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
-        
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                   <!--
+
                 <configuration>
                     <image>
                         <builder>paketobuildpacks/builder:tiny</builder>
                         <env>
                             <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
                         </env>
-                        <buildpacks>
-                            <buildpack>gcr.io/paketo-buildpacks/java-native-image:latest</buildpack>
-                        </buildpacks>
                     </image>
                 </configuration>
-             -->
-            </plugin>
-       
-        
-            <plugin>
-                <groupId>org.springframework.experimental</groupId>
-                <artifactId>spring-aot-maven-plugin</artifactId>
-                <version>0.12.1</version>
                 <executions>
                     <execution>
-                        <id>generate</id>
+                        <!-- Spring Boot Actuator displays build-related information
+                          if a META-INF/build-info.properties file is present -->
                         <goals>
-                            <goal>generate</goal>
+                            <goal>build-info</goal>
                         </goals>
+                        <configuration>
+                            <additionalProperties>
+                                <encoding.source>${project.build.sourceEncoding}</encoding.source>
+                                <encoding.reporting>${project.reporting.outputEncoding}</encoding.reporting>
+                                <java.source>${maven.compiler.source}</java.source>
+                                <java.target>${maven.compiler.target}</java.target>
+                                <spring.boot.version>${project.parent.version}</spring.boot.version>
+                            </additionalProperties>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
-        
+
+
         </plugins>
     </build>
 
