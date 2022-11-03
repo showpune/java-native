@@ -6,7 +6,6 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.0.0-RC1</version>
-        <relativePath/>
     </parent>
     <groupId>persion.lizhiyong</groupId>
     <artifactId>java-native</artifactId>
@@ -96,27 +95,29 @@
     </build>
     <repositories>
         <repository>
-            <id>spring-release</id>
-            <name>Spring release</name>
-            <url>https://repo.spring.io/release</url>
-        </repository>
-        <repository>
             <id>spring-milestone</id>
             <name>Spring milestone</name>
             <url>https://repo.spring.io/milestone</url>
         </repository>
+        <repository>
+            <id>spring-release</id>
+            <name>Spring release</name>
+            <url>https://repo.spring.io/release</url>
+        </repository>
+
     </repositories>
     <pluginRepositories>
         <!-- ... -->
-        <pluginRepository>
-            <id>spring-release</id>
-            <name>Spring release</name>
-            <url>https://repo.spring.io/release</url>
-        </pluginRepository>
+
         <pluginRepository>
             <id>spring-milestone</id>
             <name>Spring milestone</name>
             <url>https://repo.spring.io/milestone</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>spring-release</id>
+            <name>Spring release</name>
+            <url>https://repo.spring.io/release</url>
         </pluginRepository>
     </pluginRepositories>
 </project>
