@@ -82,7 +82,7 @@
                             <buildpack>gcr.io/paketo-buildpacks/bellsoft-liberica:9.9.0-ea</buildpack>
                             <buildpack>gcr.io/paketo-buildpacks/java-native-image</buildpack>
                         </buildpacks>
-                        <builder>paketobuildpacks/builder:tiny</builder>
+                        <builder>paketobuildpacks/builder:base</builder>
                         <env>
                             <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
                             <BP_JVM_VERSION>17</BP_JVM_VERSION>
